@@ -10,7 +10,7 @@
 	compatible = "allwinner,sun8i-h3";
 
 	fragment@0 {
-		target = <&spi0>;
+		target = <&spi1>;
 		__overlay__ {
 			status = "okay";
 		};
@@ -24,7 +24,7 @@
 	};
 
 	fragment@2 {
-		target = <&spidev0>;
+		target = <&spidev1>;
 		__overlay__ {
 			status = "disabled";
 		};
@@ -33,21 +33,21 @@
 	fragment@3 {
 		target = <&pio>;
 		__overlay__ {
-			spi0_cs_pins: spi0_cs_pins {
-				pins = "PC3";
+			spi1_cs_pins: spi1_cs_pins {
+				pins = "PA13";
 				function = "gpio_out";
 			};
 		};
 	};
 
 	fragment@4 {
-		target = <&spi0>;
+		target = <&spi1>;
 		__overlay__ {
 			/* needed to avoid dtc warning */
 			#address-cells = <1>;
 			#size-cells = <0>;
-			pinctrl-0 = <&spi0_pins &spi0_cs_pins>;
-			cs-gpios = <&pio 2 3 GPIO_ACTIVE_HIGH>;
+			pinctrl-0 = <&spi1_pins &spi1_cs_pins>;
+			cs-gpios = <&pio 0 13 GPIO_ACTIVE_HIGH>;
 
 			pitft: pitft@0{
 				compatible = "sitronix,st7789vw";
@@ -58,11 +58,26 @@
 				rotate = <0>;
 				fps = <33>;
 				buswidth = <8>;
-				dc-gpios = <&pio 0 1 GPIO_ACTIVE_HIGH>;	 /* PA1 */
+				/*
+				[9] SPI1_CS/GPIOA13
+				[9] SPI1_CLK/GPIOA14
+				[9] SPI1_MOSI/GPIOA15
+				[9] SIP1_MISO/GPIOA16
+				UART1_RX/GPIOG7
+				UART1_TX/GPIOG6
+				*/
+				dc-gpios = <&pio 6 6 GPIO_ACTIVE_HIGH>;	 /* PG6 */
 				reset-gpios = <&pio 6 11 GPIO_ACTIVE_HIGH>; /* PG11 */
-				led-gpios = <&pio 0 6 GPIO_ACTIVE_LOW>;	 /* PA6 */
+				led-gpios = <&pio 6 7 GPIO_ACTIVE_LOW>;	 /* PG7 */
 				debug = <0x0>;
 			};
+		};
+	};
+
+	fragment@5 {
+		target = <&uart3>;
+		__overlay__ {
+			status = "disabled";
 		};
 	};
 };

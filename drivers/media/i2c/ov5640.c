@@ -2665,7 +2665,7 @@ static int ov5640_probe(struct i2c_client *client,
 		goto free_ctrls;
 	}
 #endif
-
+	dev_info(dev, "OV5640 Probed\n");
 	return 0;
 
 free_ctrls:
